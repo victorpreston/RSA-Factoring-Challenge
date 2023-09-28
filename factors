@@ -1,0 +1,32 @@
+#!/usr/bin/python3
+"""Module RSA Factoring Challenge"""
+from sys import argv
+
+
+def factorize(num):
+    """Print integers with values 'num'>1"""
+    j = 2
+
+    if num < 2:
+        return
+    print()
+    print(num, "<- num-bef")
+    while num % j:
+        j += 1
+    print("{:.0f}={:.0f}*{:.0f}".format(num, num / j, j))
+    print(num, "<- num-aft")
+    print()
+
+if len(argv) != 2:
+    exit()
+
+try:
+    with open(argv[1]) as file:
+        line = file.readline()
+
+        while line != "":
+            num = int(line.split('\n')[0])
+            factorize(num)
+            line = file.readline()
+except:
+    pass
