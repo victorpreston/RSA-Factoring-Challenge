@@ -3,26 +3,43 @@ from sys import argv
 import math
 
 def is_prime(num):
-    i = 3
+    if num < 2:
+        return False
+    if num == 2 or num == 3:
+        return True
+    if num % 2 == 0 or num % 3 == 0:
+        return False
+    i = 5
+    w = 2
     while i * i <= num:
         if num % i == 0:
             return False
-        i += 2
+        i += w
+        w = 6 - w
     return True
 
 def factory(num):
     if num % 2 == 0:
         i = 2
-        print("{}={}*{}".format(num, int(num/i), i))
+        if is_prime(i):
+            print("{}={}*{}".format(num, int(num/i), i))
+        else:
+            print("Not a valid RSA number")
     else:
         sq = int(math.sqrt(num))
         if sq ** 2 == num:
-            print("{}={}*{}".format(num, sq, int(num/sq)))
-            return
-        for i in range(3, sq + 1, 2):
-            if num % i == 0 and is_prime(i):
-                print("{}={}*{}".format(num, int(num/i), i))
-                return
+            if is_prime(sq):
+                print("{}={}*{}".format(num, sq, int(num/sq)))
+            else:
+                print("Not a valid RSA number")
+        else:
+            sq = int(sq) + 1
+            for i in range(3, sq, +2):
+                if num % i == 0 and is_prime(i):
+                    if is_prime(int(num/i)):
+                        print("{}={}*{}".format(num, int(num/i), i))
+                        return
+            print("Not a valid RSA number")
 
 def factors(filename):
     with open(filename, encoding="utf-8") as my_file:
@@ -32,4 +49,3 @@ def factors(filename):
 
 if __name__ == "__main__":
     factors(argv[1])
-
