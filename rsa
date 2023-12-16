@@ -1,28 +1,46 @@
-#!/usr/bin/env python3
-'''Module - Factors natural numbers'''
-
-from  __future__  import  division
-import sys
-import os
+#!/usr/bin/python3
+from sys import argv
+import math
+"""gets the first two factors of any number"""
 
 
-def func_factors(filename):
-    '''Read and find Factorials of every line '''
-    with open(filename, 'r') as f:
-        for line in f:
-            num = int(line)
-            resul = factors(num)
-            print ("{}={}*{}".format(num, int(num / resul), resul))
-    f.closed
+def is_prime(num):
+    """checks if a number is prime"""
+    i = 3
+    if num % 2 == 0:
+        return False
+    while i * i <= num:
+        if num % i == 0:
+            return False
+        i += 2
+    return True
 
-def factors(x):
-    '''Returns the minimun factorial number '''
-    for y in range(1, x + 1):
-        if x % y == 0 and y is not 1:
-            return y
+
+def factory(num):
+    """This factor function gets the factors of a number & prints them out"""
+    if num % 2 == 0:
+        i = 2
+        print("{}={}*{}".format(num, int(num/i), i))
+    else:
+        sq = math.sqrt(num)
+        if sq % 1 == 0:
+            print("{}={}*{}".format(num, sq, int(num/sq)))
+            return
+        sq = int(sq) + 1
+        for i in range(3, sq, +2):
+            if num % i == 0:
+                if is_prime(i):
+                    print("{}={}*{}".format(num, int(num/i), i))
+                    return
+
+
+def factors(filename):
+    """read_file"""
+    with open(filename, encoding="utf-8") as my_file:
+        for i in my_file.readlines():
+            n = int(i)
+            result = factory(n)
+
 
 if __name__ == "__main__":
-    '''main'''
-    if (len(sys.argv) is not 2):
-        raise SyntaxError("[BAD-USAGE]: Expected only one argument")
-    func_factors(sys.argv[1])
+    factors(argv[1])
