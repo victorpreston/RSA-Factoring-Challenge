@@ -1,51 +1,33 @@
 #!/usr/bin/python3
-from sys import argv
-import math
+from sympy import isprime, factorint
+import sys
 
-def is_prime(num):
-    if num < 2:
-        return False
-    if num == 2 or num == 3:
-        return True
-    if num % 2 == 0 or num % 3 == 0:
-        return False
-    i = 5
-    w = 2
-    while i * i <= num:
-        if num % i == 0:
-            return False
-        i += w
-        w = 6 - w
-    return True
+def factorize_rsa_number(n):
+    # Check if the number is prime
+    if isprime(n):
+        print(f"{n} is already a prime number.")
+        return
 
-def factory(num):
-    if num % 2 == 0:
-        i = 2
-        if is_prime(i):
-            print("{}={}*{}".format(num, int(num/i), i))
-        else:
-            print("Not a valid RSA number")
-    else:
-        sq = int(math.sqrt(num))
-        if sq ** 2 == num:
-            if is_prime(sq):
-                print("{}={}*{}".format(num, sq, int(num/sq)))
-            else:
-                print("Not a valid RSA number")
-        else:
-            sq = int(sq) + 1
-            for i in range(3, sq, +2):
-                if num % i == 0 and is_prime(i):
-                    if is_prime(int(num/i)):
-                        print("{}={}*{}".format(num, int(num/i), i))
-                        return
-            print("Not a valid RSA number")
+    # Factorize the number
+    factors = factorint(n)
 
-def factors(filename):
-    with open(filename, encoding="utf-8") as my_file:
-        for i in my_file.readlines():
-            n = int(i)
-            factory(n)
+    # Check if there are exactly two prime factors
+    if len(factors) != 2 or not all(isprime(f) for f in factors):
+        print(f"Not a valid RSA number: {n}")
+        return
+
+    p, q = factors.keys()
+    print(f"{n}={p}*{q}")
+
+def main(filename):
+    with open(filename, 'r') as file:
+        for line in file:
+            n = int(line.strip())
+            factorize_rsa_number(n)
 
 if __name__ == "__main__":
-    factors(argv[1])
+    if len(sys.argv) != 2:
+        print("Usage: python rsa_factoring.py <filename>")
+    else:
+        main(sys.argv[1])
+
