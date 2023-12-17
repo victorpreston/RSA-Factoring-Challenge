@@ -1,22 +1,32 @@
-#!/bin/bash
+#!/usr/bin/python3
+"""
+Factorize numbers in a file into a product of two prime numbers
+"""
+import sys
 
-# Usage function
-usage() {
-	echo "Usage: $0 <file>"
-	echo "  <file>  File containing positive integers (one per line)"
-}
 
-# Check if file parameter is provided and exists
-if [ -z "$1" ] || [ ! -f "$1" ]; then
-	usage
-	exit 1
-fi
+def factorize():
+    """
+    A function to search file and factorize the given set of numbers into two prime numbers (format n = p*q)
+    """
+    try:
+        file = sys.argv[1]
+        with open(file) as f:
+            for line_number in f:
+                line_number = int(line_number)
+                if line_number % 2 == 0:
+                        print("{}={}*{}".format(line_number, line_number // 2, 2))
+                        continue
+                i = 3
+                while i < line_number // 2:
+                    if line_number % i == 0:
+                        print("{}={}*{}".format(line_number, line_number // i, i))
+                        break
+                    i = i + 2
+                if i == (line_number // 2) + 1:
+                    print("{}={}*{}".format(line_number, line_number, 1))
+    except (IndexError):
+        pass
 
-# Read the file line by line
-filename="$1"
-while IFS= read -r number; do
-	result=$(factor "$number")
-	second_num=$(echo $result | tr ":" "=" | cut -d " " -f 2 | tr -d " ")
-	third_num=$(expr $number / $second_num)
-	echo "$number=$third_num*$second_num"
-done < "$filename"
+
+factorize()
