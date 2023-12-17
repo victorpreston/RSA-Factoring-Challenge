@@ -2,9 +2,17 @@
 
 from sys import argv
 
+def is_prime(num):
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
+
 def factorize(number):
     for i in range(2, number):
-        if number % i == 0:
+        if number % i == 0 and is_prime(i):
             return i, number // i
 
 if __name__ == "__main__":
@@ -18,4 +26,7 @@ if __name__ == "__main__":
         for line in file:
             number = int(line.strip())
             factors = factorize(number)
-            print(f"{number}={factors[0]}*{factors[1]}")
+            if factors:
+                print(f"{number}={factors[0]}*{factors[1]}")
+            else:
+                print(f"Unable to factorize {number}")
