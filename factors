@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 from sys import argv
+import math
+import random
 
 def is_prime(num):
     if num < 2:
@@ -10,10 +12,33 @@ def is_prime(num):
             return False
     return True
 
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def pollards_rho(n):
+    x = random.randint(1, n - 1)
+    y = x
+    d = 1
+    f = lambda x: (x**2 + 1) % n
+
+    while d == 1:
+        x = f(x)
+        y = f(f(y))
+        d = gcd(abs(x - y), n)
+
+    return d, n // d
+
 def factorize(number):
-    for i in range(2, number):
+    if is_prime(number):
+        return None  # Cannot factorize a prime number
+
+    for i in range(2, int(number**0.5) + 1):
         if number % i == 0 and is_prime(i):
             return i, number // i
+
+    return pollards_rho(number)
 
 if __name__ == "__main__":
     if len(argv) != 2:
@@ -29,4 +54,4 @@ if __name__ == "__main__":
             if factors:
                 print(f"{number}={factors[0]}*{factors[1]}")
             else:
-                print(f"Unable to factorize {number}")
+                print(f"{number} is prime and cannot be factorized")
