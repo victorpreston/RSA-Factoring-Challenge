@@ -7,7 +7,7 @@ import random
 def is_prime(num):
     if num < 2:
         return False
-    for i in range(2, int(num**0.5) + 1):
+    for i in range(2, int(math.sqrt(num)) + 1):
         if num % i == 0:
             return False
     return True
@@ -31,10 +31,13 @@ def pollards_rho(n):
     return d, n // d
 
 def factorize(number):
+    if number < 2:
+        return None  # Cannot factorize numbers less than 2
+
     if is_prime(number):
         return None  # Cannot factorize a prime number
 
-    for i in range(2, int(number**0.5) + 1):
+    for i in range(2, int(math.sqrt(number)) + 1):
         if number % i == 0 and is_prime(i):
             return i, number // i
 
