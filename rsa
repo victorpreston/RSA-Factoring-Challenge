@@ -1,33 +1,22 @@
-#!/usr/bin/python3
-from sympy import isprime, factorint
-import sys
+#!/bin/bash
 
-def factorize_rsa_number(n):
-    # Check if the number is prime
-    if isprime(n):
-        print(f"{n} is already a prime number.")
-        return
+# Usage function
+usage() {
+	echo "Usage: $0 <file>"
+	echo "  <file>  File containing positive integers (one per line)"
+}
 
-    # Factorize the number
-    factors = factorint(n)
+# Check if file parameter is provided and exists
+if [ -z "$1" ] || [ ! -f "$1" ]; then
+	usage
+	exit 1
+fi
 
-    # Check if there are exactly two prime factors
-    if len(factors) != 2 or not all(isprime(f) for f in factors):
-        print(f"Not a valid RSA number: {n}")
-        return
-
-    p, q = factors.keys()
-    print(f"{n}={p}*{q}")
-
-def main(filename):
-    with open(filename, 'r') as file:
-        for line in file:
-            n = int(line.strip())
-            factorize_rsa_number(n)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python rsa_factoring.py <filename>")
-    else:
-        main(sys.argv[1])
-
+# Read the file line by line
+filename="$1"
+while IFS= read -r number; do
+	result=$(factor "$number")
+	second_num=$(echo $result | tr ":" "=" | cut -d " " -f 2 | tr -d " ")
+	third_num=$(expr $number / $second_num)
+	echo "$number=$third_num*$second_num"
+done < "$filename"
