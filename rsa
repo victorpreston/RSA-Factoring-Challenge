@@ -5,15 +5,8 @@ check_factor()
     num=$1
     factors=($(factor "$num" | awk '{ for (i=2; i<=NF; i++) print $i }'))
     
-    if [ "${#factors[@]}" -gt 0 ]; then
-        echo -n "$num="
-        for factor in "${factors[@]}"; do
-            echo -n "$factor"
-            if [ "$factor" != "${factors[-1]}" ]; then
-                echo -n "*"
-            fi
-        done
-        echo
+    if [ "${#factors[@]}" -eq 2 ]; then
+        echo "$num=${factors[0]}*${factors[1]}"
     else
         echo "Error: Unable to factorize $num"
     fi
